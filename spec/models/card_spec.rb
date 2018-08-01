@@ -15,5 +15,9 @@ describe Card do
     it 'should have many attachments' do
       expect { card.attachments.build }.not_to raise_error
     end
+
+    it 'should have many labels' do
+      expect { card.labels.build }.not_to raise_error
+    end
   end
 end

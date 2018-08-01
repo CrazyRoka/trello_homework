@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2018_08_01_132806) do
   end
 
   create_table "cards", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.string "description"
     t.datetime "due_date"
     t.bigint "list_id"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 2018_08_01_132806) do
 
   create_table "comments", force: :cascade do |t|
     t.string "text"
-    t.bigint "card_id"
+    t.bigint "card_id", null: false
     t.bigint "owner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2018_08_01_132806) do
   end
 
   create_table "dashboards", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.boolean "public"
     t.bigint "owner_id"
     t.datetime "created_at", null: false
@@ -70,13 +70,13 @@ ActiveRecord::Schema.define(version: 2018_08_01_132806) do
 
   create_table "labels", force: :cascade do |t|
     t.string "name"
-    t.integer "color", default: 0
+    t.integer "color", default: 0, null: false
     t.bigint "dashboard_id"
     t.index ["dashboard_id"], name: "index_labels_on_dashboard_id"
   end
 
   create_table "lists", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.bigint "dashboard_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -84,9 +84,9 @@ ActiveRecord::Schema.define(version: 2018_08_01_132806) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "password_digest"
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "password_digest", null: false
     t.string "avatar"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
