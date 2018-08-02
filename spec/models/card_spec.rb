@@ -45,6 +45,17 @@ describe Card do
       card.due_date = nil
       expect(card.valid?).to eq(true)
     end
+
+    it 'should have comments count' do
+      expect(card.comments_count).to eq(0)
+
+      comment = create(:comment, card: card)
+      expect(card.reload.comments_count).to eq(1)
+
+      comment.destroy
+
+      expect(card.reload.comments_count).to eq(0)
+    end
   end
 
   context 'scopes' do
