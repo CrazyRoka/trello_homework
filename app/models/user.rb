@@ -13,4 +13,6 @@ class User < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   before_validation { name.strip! }
+
+  scope :by_username, ->(str) { where(arel_table[:name].matches("%#{str}%")) }
 end

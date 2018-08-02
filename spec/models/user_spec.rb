@@ -40,12 +40,12 @@ describe User do
   end
 
   context 'scopes' do
-    subject(:fred) { create(:user, name: 'Fredius', email: 'fred@email.com') }
-    subject(:john) { create(:user, name: 'Johnius', email: 'john@email.com') }
+    let!(:fred) { create(:user, name: 'Fredius', email: 'fred@email.com') }
+    let!(:john) { create(:user, name: 'Johnius', email: 'john@email.com') }
 
     it 'should scope users by names' do
-      expect(User.by_username('ius')).to eq(User.all)
-      expect(User.by_username('fred')).to eq(User.find(fred))
+      expect(User.by_username('ius')).to contain_exactly(john, fred)
+      expect(User.by_username('fred')).to contain_exactly(fred)
     end
   end
 end

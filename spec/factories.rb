@@ -20,7 +20,6 @@ FactoryBot.define do
   factory :card do
     title      'Homework'
     text       'Lets do it'
-    due_date { 5.days.from_now }
     list
   end
 

@@ -41,14 +41,13 @@ describe Dashboard do
   end
 
   context 'scopes' do
-    subject(:school_dashboard) { create(:dashboard, title: 'school') }
-    subject(:link_up_dashboard) { create(:dashboard, title: 'LinkUp') }
+    let!(:school_dashboard) { create(:dashboard, title: 'school', owner: owner) }
+    let!(:link_up_dashboard) { create(:dashboard, title: 'LinkUp', owner: owner) }
     let(:dashboard_list) { Dashboard.ordered_by_title }
+    let(:owner) { create(:user) }
 
     it 'should order dashboards by title' do
-      expect(dashboard_list.size).to eq(2)
-      expect(dashboard_list[0]).to eq(link_up_dashboard)
-      expect(dashboard_list[1]).to eq(school_dashboard)
+      expect(dashboard_list).to contain_exactly(school_dashboard, link_up_dashboard)
     end
   end
 end

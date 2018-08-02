@@ -61,8 +61,8 @@ describe Card do
       yellow.cards << homework_card
       yellow.save!
 
-      expect(Card.by_labels(red.color)).to eq(Card.find(something_card))
-      expect(Card.by_labels(red.color, yellow.color)).to eq(Card.all)
+      expect(Card.by_labels(red.color)).to contain_exactly(something_card)
+      expect(Card.by_labels(red.color, yellow.color)).to contain_exactly(something_card, homework_card)
     end
 
     let(:fred) { create(:user, email: 'fred@email.com') }
@@ -75,32 +75,32 @@ describe Card do
       something_card.users << john
       something_card.save
 
-      expect(Card.by_assigned_users(fred.id)).to eq(Card.find(homework_card))
-      expect(Card.by_assigned_users(john.id, fred.id)).to eq(Card.all)
+      expect(Card.by_assigned_users(fred.id)).to contain_exactly(homework_card)
+      expect(Card.by_assigned_users(john.id, fred.id)).to contain_exactly(homework_card, something_card)
     end
 
     it 'should return cards by matching title' do
-      expect(Card.by_title('m')).to eq(Card.all)
-      expect(Card.by_title('o')).to eq(Card.find(homework_card))
+      expect(Card.by_title('m')).to contain_exactly(homework_card, something_card)
+      expect(Card.by_title('o')).to contain_exactly(homework_card)
     end
 
     it 'should return cards that should be completed before datetime' do
       homework_card.due_date = 5.days.from_now
       homework_card.save
-      expect(Card.should_be_done_until(2.days.from_now)).to eq(Card.none)
-      expect(Card.should_be_done_until(6.days.from_now)).to eq(Card.find(homework_card))
+      expect(Card.should_be_done_until(2.days.from_now)).to contain_exactly()
+      expect(Card.should_be_done_until(6.days.from_now)).to contain_exactly(homework_card)
     end
 
     it 'should return ovedue cards' do
       homework_card.due_date = 5.days.ago
       homework_card.save
-      expect(Card.overdue).to eq(Card.find(homework_card))
+      expect(Card.overdue).to contain_exactly(homework_card)
     end
 
     it 'should return cards without due date' do
       homework_card.due_date = 5.days.ago
       homework_card.save
-      expect(Card.without_due_date).to eq(Card.find(something_card))
+      expect(Card.without_due_date).to contain_exactly(something_card)
     end
   end
 end
