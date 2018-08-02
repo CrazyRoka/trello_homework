@@ -20,4 +20,30 @@ describe Card do
       expect { card.labels.build }.not_to raise_error
     end
   end
+
+  context 'validation' do
+    subject(:card) { create(:card) }
+
+    it 'should have non empty title' do
+      card.title = 'true'
+      expect(card.valid?).to eq(true)
+
+      card.title = ''
+      expect(card.valid?).to eq(false)
+
+      card.title = '      '
+      expect(card.valid?).to eq(false)
+    end
+
+    it 'can have text' do
+      card.text = '   '
+      expect(card.valid?).to eq(true)
+      expect(card.text).to eq('')
+    end
+
+    it 'can have due date' do
+      card.due_date = nil
+      expect(card.valid?).to eq(true)
+    end
+  end
 end

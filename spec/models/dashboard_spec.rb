@@ -20,4 +20,23 @@ describe Dashboard do
       expect { dashboard.owner = User.new }.not_to raise_error
     end
   end
+
+  context 'validation' do
+    subject(:dashboard) { create(:dashboard) }
+
+    it 'should have non empty title' do
+      dashboard.title = '   '
+      expect(dashboard.valid?).to eq(false)
+      expect(dashboard.title).to eq('')
+
+      dashboard.title = '  hello  '
+      expect(dashboard.valid?).to eq(true)
+      expect(dashboard.title).to eq('hello')
+    end
+
+    it 'should have owner' do
+      dashboard.owner = nil
+      expect(dashboard.valid?).to eq(false)
+    end
+  end
 end

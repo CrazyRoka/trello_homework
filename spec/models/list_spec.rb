@@ -12,4 +12,17 @@ describe List do
       expect { list.cards.build }.not_to raise_error
     end
   end
+
+  context 'validation' do
+    subject(:list) { create(:list) }
+
+    it 'should have non empty title' do
+      list.title = '   '
+      expect(list.valid?).to eq(false)
+
+      list.title = '  hello '
+      expect(list.valid?).to eq(true)
+      expect(list.title).to eq('hello')
+    end
+  end
 end
