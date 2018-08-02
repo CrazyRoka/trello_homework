@@ -24,5 +24,9 @@ describe List do
       expect(list.valid?).to eq(true)
       expect(list.title).to eq('hello')
     end
+
+    it 'should update dashboard' do
+      expect { list.touch }.to change { list.dashboard.updated_at }
+    end
   end
 end

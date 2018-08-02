@@ -56,6 +56,10 @@ describe Card do
 
       expect(card.reload.comments_count).to eq(0)
     end
+
+    it 'should update dashboard' do
+      expect { card.touch }.to change { card.list.dashboard.updated_at }
+    end
   end
 
   context 'scopes' do
