@@ -38,4 +38,14 @@ describe User do
       expect(user.valid?).to eq(false)
     end
   end
+
+  context 'scopes' do
+    subject(:fred) { create(:user, name: 'Fredius', email: 'fred@email.com') }
+    subject(:john) { create(:user, name: 'Johnius', email: 'john@email.com') }
+
+    it 'should scope users by names' do
+      expect(User.by_username('ius')).to eq(User.all)
+      expect(User.by_username('fred')).to eq(User.find(fred))
+    end
+  end
 end

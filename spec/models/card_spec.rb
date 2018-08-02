@@ -46,4 +46,61 @@ describe Card do
       expect(card.valid?).to eq(true)
     end
   end
+
+  context 'scopes' do
+    subject!(:homework_card) { create(:card, title: 'Homework') }
+    subject!(:something_card) { create(:card, title: 'smth', list: homework_card.list) }
+
+    let(:red) { create(:label, color: :red) }
+    let(:yellow) { create(:label, color: :yellow) }
+
+    it 'should return all cards with red label' do
+      red.cards << something_card
+      red.save!
+
+      yellow.cards << homework_card
+      yellow.save!
+
+      expect(Card.by_labels(red.color)).to eq(Card.find(something_card))
+      expect(Card.by_labels(red.color, yellow.color)).to eq(Card.all)
+    end
+
+    let(:fred) { create(:user, email: 'fred@email.com') }
+    let(:john) { create(:user, email: 'john@email.com') }
+
+    it 'should return cards by assigned users' do
+      homework_card.users << fred
+      homework_card.save
+
+      something_card.users << john
+      something_card.save
+
+      expect(Card.by_assigned_users(fred.id)).to eq(Card.find(homework_card))
+      expect(Card.by_assigned_users(john.id, fred.id)).to eq(Card.all)
+    end
+
+    it 'should return cards by matching title' do
+      expect(Card.by_title('m')).to eq(Card.all)
+      expect(Card.by_title('o')).to eq(Card.find(homework_card))
+    end
+
+    it 'should return cards that should be completed before datetime' do
+      homework_card.due_date = 5.days.from_now
+      homework_card.save
+      expect(Card.should_be_done_until(2.days.from_now)).to eq(Card.none)
+      expect(Card.should_be_done_until(6.days.from_now)).to eq(Card.find(homework_card))
+    end
+
+    it 'should return ovedue cards' do
+      homework_card.due_date = 5.days.ago
+      homework_card.save
+      expect(Card.overdue).to eq(Card.find(homework_card))
+    end
+
+    it 'should return cards without due date' do
+      homework_card.due_date = 5.days.ago
+      homework_card.save
+      expect(Card.without_due_date).to eq(Card.find(something_card))
+    end
+  end
 end

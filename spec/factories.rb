@@ -21,12 +21,17 @@ FactoryBot.define do
     title      'Homework'
     text       'Lets do it'
     due_date { 5.days.from_now }
-    list     { create(:list) }
+    list
+  end
+
+  factory :label do
+    name      'fatal task'
+    color     0
   end
 
   factory :comment do
     text    'It`s amazing'
-    card  { create(:card) }
+    card
     owner { create(:user, email: 'something_else@email.com') }
   end
 end
