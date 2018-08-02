@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include ImageUploader::Attachment.new(:image)
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -12,7 +14,7 @@ class User < ApplicationRecord
   validates :name, presence: true, allow_blank: false
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
-  before_validation { name.strip! }
+  before_validation { name&.strip! }
 
   scope :by_username, ->(str) { where(arel_table[:name].matches("%#{str}%")) }
 end

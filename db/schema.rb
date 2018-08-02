@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_02_104518) do
+ActiveRecord::Schema.define(version: 2018_08_02_080726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,9 +29,10 @@ ActiveRecord::Schema.define(version: 2018_08_02_104518) do
     t.text "text"
     t.datetime "due_date"
     t.bigint "list_id"
+    t.integer "comments_count", default: 0
+    t.integer "integer", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "comments_count", default: 0
     t.index ["list_id"], name: "index_cards_on_list_id"
   end
 
@@ -86,7 +87,7 @@ ActiveRecord::Schema.define(version: 2018_08_02_104518) do
 
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
-    t.string "avatar"
+    t.text "image_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false

@@ -48,4 +48,13 @@ describe User do
       expect(User.by_username('fred')).to contain_exactly(fred)
     end
   end
+
+  context 'image downloading' do
+    subject(:user) { create(:user) }
+
+    it 'should save image' do
+      expect { user.image = File.open('spec/files/image.jpg') }.not_to raise_error
+      expect { user.save }.not_to raise_error
+    end
+  end
 end

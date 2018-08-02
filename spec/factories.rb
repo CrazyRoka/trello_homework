@@ -5,7 +5,6 @@ FactoryBot.define do
     password '123456'
   end
 
-  # This will use the User class (Admin would have been guessed)
   factory :dashboard do
     title   'main dashboard'
     owner { create(:user) }
@@ -29,8 +28,8 @@ FactoryBot.define do
   end
 
   factory :comment do
-    text    'It`s amazing'
     card
+    text    'It`s amazing'
     owner { create(:user, email: 'something_else@email.com') }
   end
 end

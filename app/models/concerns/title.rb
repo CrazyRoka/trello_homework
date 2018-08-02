@@ -4,7 +4,7 @@ module Title
   extend ActiveSupport::Concern
 
   included do
-    before_validation { title.strip! }
+    before_validation { title&.strip! }
     validates :title, presence: true, allow_blank: false
   end
 
