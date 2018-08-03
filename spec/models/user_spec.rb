@@ -1,58 +1,41 @@
 require 'rails_helper'
 
 describe User do
-  context 'relationship' do
-    subject(:user) { described_class.new }
+  context 'Association' do
+    it { is_expected.to have_and_belong_to_many(:dashboards) }
+    it { is_expected.to have_and_belong_to_many(:cards) }
+    it { is_expected.to have_many(:created_dashboards).dependent(:nullify) }
+  end
 
-    it 'should have many dashboards' do
-      expect { user.dashboards.build }.not_to raise_error
-    end
+  context 'Validation' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to allow_value('email@addresse.foo').for(:email) }
+    it { is_expected.not_to allow_value('foo').for(:email) }
+  end
 
-    it 'should have many created dashboards' do
-      expect { user.created_dashboards.build }.not_to raise_error
-    end
+  context 'Callbacks' do
+    let(:user) { create(:user, name: '   My  name  ') }
 
-    it 'should have many cards' do
-      expect { user.cards.build }.not_to raise_error
+    it 'squishes name' do
+      expect(user.name).to eq('My name')
     end
   end
 
-  context 'validation' do
-    subject(:user) { create(:user) }
+  context 'Scopes' do
+    let!(:fred) { create(:user, name: 'Fredius') }
+    let!(:john) { create(:user, name: 'Johnius') }
 
-    it 'should have non empty name' do
-      user.name = '   '
-      expect(user.valid?).to eq(false)
-      expect(user.name).to eq('')
-
-      user.name = '  hello  '
-      expect(user.valid?).to eq(true)
-      expect(user.name).to eq('hello')
-    end
-
-    it 'should have valid email' do
-      user.email = 'something@mail.com'
-      expect(user.valid?).to eq(true)
-
-      user.email = 'something'
-      expect(user.valid?).to eq(false)
-    end
-  end
-
-  context 'scopes' do
-    let!(:fred) { create(:user, name: 'Fredius', email: 'fred@email.com') }
-    let!(:john) { create(:user, name: 'Johnius', email: 'john@email.com') }
-
-    it 'should scope users by names' do
+    it 'has scope users by names' do
       expect(User.by_username('ius')).to contain_exactly(john, fred)
       expect(User.by_username('fred')).to contain_exactly(fred)
     end
   end
 
-  context 'image downloading' do
+  context 'Image downloading' do
     subject(:user) { create(:user) }
 
-    it 'should save image' do
+    it 'saves image' do
       expect { user.image = File.open('spec/files/image.jpg') }.not_to raise_error
       expect { user.save }.not_to raise_error
     end

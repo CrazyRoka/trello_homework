@@ -1,89 +1,50 @@
 require 'rails_helper'
 
 describe Card do
-  context 'relationship' do
-    subject(:card) { described_class.new }
+  context 'Association' do
+    it { is_expected.to have_and_belong_to_many(:users) }
+    it { is_expected.to have_and_belong_to_many(:labels) }
+    it { is_expected.to have_many(:comments).dependent(:destroy) }
+    it { is_expected.to have_many(:attachments).dependent(:destroy) }
+    it { is_expected.to belong_to(:list).touch(true) }
+  end
 
-    it 'should have many users' do
-      expect { card.users.build }.not_to raise_error
-    end
+  context 'Validation' do
+    it { is_expected.to validate_presence_of(:title) }
+    it { is_expected.not_to validate_presence_of(:text) }
+    it { is_expected.not_to validate_presence_of(:due_date) }
+  end
 
-    it 'should have many comments' do
-      expect { card.comments.build }.not_to raise_error
-    end
+  context 'Callbacks' do
+    let(:card) { create(:card, title: '   My  name  ', text: '  My  name  ') }
 
-    it 'should have many attachments' do
-      expect { card.attachments.build }.not_to raise_error
-    end
-
-    it 'should have many labels' do
-      expect { card.labels.build }.not_to raise_error
+    it 'squishes title' do
+      expect(card.title).to eq('My name')
     end
   end
 
-  context 'validation' do
-    subject(:card) { create(:card) }
-
-    it 'should have non empty title' do
-      card.title = 'true'
-      expect(card.valid?).to eq(true)
-
-      card.title = ''
-      expect(card.valid?).to eq(false)
-
-      card.title = '      '
-      expect(card.valid?).to eq(false)
-    end
-
-    it 'can have text' do
-      card.text = '   '
-      expect(card.valid?).to eq(true)
-      expect(card.text).to eq('')
-    end
-
-    it 'can have due date' do
-      card.due_date = nil
-      expect(card.valid?).to eq(true)
-    end
-
-    it 'should have comments count' do
-      expect(card.comments_count).to eq(0)
-
-      comment = create(:comment, card: card)
-      expect(card.reload.comments_count).to eq(1)
-
-      comment.destroy
-
-      expect(card.reload.comments_count).to eq(0)
-    end
-
-    it 'should update dashboard' do
-      expect { card.touch }.to change { card.list.dashboard.updated_at }
-    end
-  end
-
-  context 'scopes' do
-    subject!(:homework_card) { create(:card, title: 'Homework') }
-    subject!(:something_card) { create(:card, title: 'smth', list: homework_card.list) }
+  context 'Scopes' do
+    let!(:homework_card) { create(:card, title: 'Homework') }
+    let!(:something_card) { create(:card, title: 'smth') }
 
     let(:red) { create(:label, color: :red) }
     let(:yellow) { create(:label, color: :yellow) }
 
-    it 'should return all cards with red label' do
+    it 'filters by label' do
       red.cards << something_card
       red.save!
 
       yellow.cards << homework_card
       yellow.save!
 
-      expect(Card.by_labels(red.color)).to contain_exactly(something_card)
-      expect(Card.by_labels(red.color, yellow.color)).to contain_exactly(something_card, homework_card)
+      expect(Card.by_labels(red)).to contain_exactly(something_card)
+      expect(Card.by_labels([red, yellow])).to contain_exactly(something_card, homework_card)
     end
 
     let(:fred) { create(:user, email: 'fred@email.com') }
     let(:john) { create(:user, email: 'john@email.com') }
 
-    it 'should return cards by assigned users' do
+    it 'filters by assigned users' do
       homework_card.users << fred
       homework_card.save
 
@@ -91,7 +52,7 @@ describe Card do
       something_card.save
 
       expect(Card.by_assigned_users(fred.id)).to contain_exactly(homework_card)
-      expect(Card.by_assigned_users(john.id, fred.id)).to contain_exactly(homework_card, something_card)
+      expect(Card.by_assigned_users([john.id, fred.id])).to contain_exactly(homework_card, something_card)
     end
 
     it 'should return cards by matching title' do

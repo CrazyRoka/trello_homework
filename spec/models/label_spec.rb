@@ -1,15 +1,12 @@
 require 'rails_helper'
 
 describe Label do
-  context 'relationship' do
-    subject(:label) { described_class.new }
+  context 'Association' do
+    it { is_expected.to belong_to(:dashboard) }
+    it { is_expected.to have_and_belong_to_many(:cards) }
+  end
 
-    it 'should belongs to dashboard' do
-      expect { label.dashboard = Dashboard.new }.not_to raise_error
-    end
-
-    it 'should have many cards' do
-      expect { label.cards.build }.not_to raise_error
-    end
+  context 'Validation' do
+    it { is_expected.not_to validate_presence_of(:name) }
   end
 end

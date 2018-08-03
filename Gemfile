@@ -59,12 +59,16 @@ group :test do
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
 
+  gem 'rails-controller-testing'
   gem 'rspec-rails'
+  gem 'shoulda'
+  gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers', :branch => 'master'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise'
+gem 'faker'
 gem 'shrine'
-gem "shrine-memory"
+gem 'shrine-memory'

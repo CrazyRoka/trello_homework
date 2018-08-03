@@ -1,44 +1,27 @@
 require 'rails_helper'
 
 describe Comment do
-  context 'relationship' do
-    subject(:comment) { described_class.new }
-
-    it 'should belongs to owner' do
-      expect { comment.owner = User.new }.not_to raise_error
-    end
-
-    it 'should belongs to card' do
-      expect { comment.card = Card.new }.not_to raise_error
-    end
-
-    it 'should have one attachment' do
-      expect { comment.attachment = Attachment.new }.not_to raise_error
-    end
+  context 'Association' do
+    it { is_expected.to belong_to(:owner).required }
+    it { is_expected.to belong_to(:card).required.counter_cache(true) }
+    it { is_expected.to have_one(:attachment).dependent(:destroy) }
   end
 
-  context 'validation do' do
-    subject(:comment) { create(:comment) }
+  context 'Validation' do
+    it { is_expected.not_to validate_presence_of(:text) }
+    it { is_expected.not_to validate_presence_of(:attachment) }
 
-    it 'must refers to card' do
-      comment.card = nil
-      expect(comment.valid?).to eq(false)
-    end
-
-    it 'must have owner' do
-      comment.owner = nil
-      expect(comment.valid?).to eq(false)
-    end
-
-    it 'can have text' do
-      comment.text = '    '
+    let(:comment) { create(:comment, text: 'smth', attachment: Attachment.create) }
+    it 'should have either text or attachment' do
+      comment.text = nil
       expect(comment.valid?).to eq(true)
-      expect(comment.text).to eq('')
-    end
 
-    it 'can have attachment' do
       comment.attachment = nil
+      comment.text = 'smth'
       expect(comment.valid?).to eq(true)
+
+      comment.text = nil
+      expect(comment.valid?).to eq(false)
     end
   end
 end

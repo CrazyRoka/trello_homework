@@ -2,5 +2,5 @@ class List < ApplicationRecord
   include Title
 
   belongs_to :dashboard, touch: true
-  has_many :cards
+  has_many :cards, dependent: :destroy
 end

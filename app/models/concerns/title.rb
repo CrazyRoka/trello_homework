@@ -4,10 +4,7 @@ module Title
   extend ActiveSupport::Concern
 
   included do
-    before_validation { title&.strip! }
+    before_validation { title&.squish! }
     validates :title, presence: true, allow_blank: false
   end
-
-  # class_methods do
-  # end
 end

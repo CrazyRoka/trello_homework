@@ -1,7 +1,7 @@
 class Comment < ApplicationRecord
   belongs_to :card, counter_cache: true
-  belongs_to :owner, class_name: 'User'
-  has_one :attachment, as: :attachable
+  belongs_to :owner, class_name: 'User', required: true
+  has_one :attachment, as: :attachable, dependent: :destroy
 
   validate :has_content
 
@@ -10,8 +10,7 @@ class Comment < ApplicationRecord
   private
 
   def has_content
-    if !text && !attachment
-      errors.add(context: 'should have text or attachment inside')
-    end
+    return if text || attachment
+    errors.add(:comment, message: 'should have text or attachment inside')
   end
 end

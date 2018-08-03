@@ -1,32 +1,20 @@
 require 'rails_helper'
 
 describe List do
-  context 'relationship' do
-    subject(:list) { described_class.new }
-
-    it 'should belongs to one dashboard' do
-      expect { list.dashboard = Dashboard.new }.not_to raise_error
-    end
-
-    it 'should have many cards' do
-      expect { list.cards.build }.not_to raise_error
-    end
+  context 'Association' do
+    it { is_expected.to belong_to(:dashboard).touch(true) }
+    it { is_expected.to have_many(:cards).dependent(:destroy) }
   end
 
-  context 'validation' do
-    subject(:list) { create(:list) }
+  context 'Validation' do
+    it { is_expected.to validate_presence_of(:title) }
+  end
 
-    it 'should have non empty title' do
-      list.title = '   '
-      expect(list.valid?).to eq(false)
+  context 'Callbacks' do
+    let(:list) { create(:list, title: '   My  name  ') }
 
-      list.title = '  hello '
-      expect(list.valid?).to eq(true)
-      expect(list.title).to eq('hello')
-    end
-
-    it 'should update dashboard' do
-      expect { list.touch }.to change { list.dashboard.updated_at }
+    it 'squishes title' do
+      expect(list.title).to eq('My name')
     end
   end
 end
