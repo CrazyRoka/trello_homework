@@ -1,0 +1,36 @@
+<p>
+  <strong>Title:</strong>
+  <%= @dashboard.title %>
+</p>
+
+<p>
+  <strong>Public:</strong>
+  <%= @dashboard.public %>
+</p>
+
+<p>
+  <strong>Owner Id:</strong>
+  <%= @dashboard.owner.id %>
+</p>
+
+<p>
+  <strong>Lists:</strong>
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <td>Title</td>
+      <td>Id</td>
+      <td colspan="1"></td>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @dashboard.lists %>
+  </tbody>
+</table>
+
+<%= link_to 'Create new list', new_dashboard_list_path(@dashboard.id) %>
+
+<%= link_to 'Edit', edit_dashboard_path(@dashboard) %> |
+<%= link_to 'Back', dashboards_path %>

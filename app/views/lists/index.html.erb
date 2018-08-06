@@ -1,0 +1,21 @@
+<h1>Lists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Dashboard Id</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @lists.each do |list| %>
+      <tr>
+        <td><%= list.title %></td>
+        <td><%= list.dashboard.id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

@@ -1,0 +1,28 @@
+<h1>Dashboards</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Public</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dashboards.each do |dashboard| %>
+      <tr>
+        <td><%= dashboard.title %></td>
+        <td><%= dashboard.public %></td>
+        <td><%= link_to 'Show', dashboard %></td>
+        <td><%= link_to 'Edit', edit_dashboard_path(dashboard) %></td>
+        <td><%= link_to 'Destroy', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Copy', copy_dashboard_path(dashboard), method: :post, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Create new', new_dashboard_path %>
