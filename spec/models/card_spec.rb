@@ -55,25 +55,25 @@ describe Card do
       expect(Card.by_assigned_users([john.id, fred.id])).to contain_exactly(homework_card, something_card)
     end
 
-    it 'should return cards by matching title' do
+    it 'filters by title' do
       expect(Card.by_title('m')).to contain_exactly(homework_card, something_card)
       expect(Card.by_title('o')).to contain_exactly(homework_card)
     end
 
-    it 'should return cards that should be completed before datetime' do
+    it 'filters by overdue in datetime' do
       homework_card.due_date = 5.days.from_now
       homework_card.save
       expect(Card.should_be_done_until(2.days.from_now)).to contain_exactly()
       expect(Card.should_be_done_until(6.days.from_now)).to contain_exactly(homework_card)
     end
 
-    it 'should return ovedue cards' do
+    it 'filters by overdue' do
       homework_card.due_date = 5.days.ago
       homework_card.save
       expect(Card.overdue).to contain_exactly(homework_card)
     end
 
-    it 'should return cards without due date' do
+    it 'filters by presence of due date' do
       homework_card.due_date = 5.days.ago
       homework_card.save
       expect(Card.without_due_date).to contain_exactly(something_card)

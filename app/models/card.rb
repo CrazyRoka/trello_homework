@@ -14,8 +14,10 @@ class Card < ApplicationRecord
   scope :by_assigned_users,
         ->(user_ids) { joins(:users).where(users: { id: user_ids }) }
   scope :should_be_done_until,
-        ->(datetime) { where(arel_table[:due_date].lt(datetime)) }
+        ->(datetime) { where(arel_table[:due_date].lt(datetime)
+                             .and(arel_table[:completed].eq(false))
+                             ) }
   scope :without_due_date, -> { where(due_date: nil) }
-  scope :overdue, -> { where(arel_table[:due_date].lt(Time.now)) }
+  scope :overdue, -> { should_be_done_until(Time.now) }
   scope :by_title, ->(str) { where(arel_table[:title].matches("%#{str}%")) }
 end
