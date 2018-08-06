@@ -27,7 +27,8 @@ describe Dashboard do
     let(:owner) { create(:user) }
 
     it 'orders dashboards by title' do
-      expect(dashboard_list).to contain_exactly(school_dashboard, link_up_dashboard)
+      expect(dashboard_list[0]).to eq(link_up_dashboard)
+      expect(dashboard_list[1]).to eq(school_dashboard)
     end
   end
 end
