@@ -13,7 +13,6 @@ class ListsController < ApplicationController
   def create
     @list = List.new(list_params)
     @list.dashboard = @dashboard
-    p @list
     respond_to do |format|
       if @list.save
         format.html { redirect_to dashboard_url(@dashboard), notice: 'List successfully created' }

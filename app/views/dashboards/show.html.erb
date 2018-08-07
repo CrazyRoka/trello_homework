@@ -17,20 +17,16 @@
   <strong>Lists:</strong>
 </p>
 
-<table>
-  <thead>
-    <tr>
-      <td>Title</td>
-      <td>Id</td>
-      <td colspan="1"></td>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render @dashboard.lists %>
-  </tbody>
-</table>
-
-<%= link_to 'Create new list', new_dashboard_list_path(@dashboard.id) %>
+<div class="board">
+  <%= render @dashboard.lists %>
+  <div class="column">
+    <div class="card">
+      <div class="card-header">
+        <%= link_to '+Add another list', new_dashboard_list_path(@dashboard.id) %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%= link_to 'Edit', edit_dashboard_path(@dashboard) %> |
 <%= link_to 'Back', dashboards_path %>

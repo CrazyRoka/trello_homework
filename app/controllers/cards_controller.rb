@@ -1,0 +1,32 @@
+class CardsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_list, only: [:new, :create]
+
+  def new
+    @card = Card.new
+  end
+
+  def create
+    @card = Card.new(card_params)
+    @card.list = @list
+    respond_to do |format|
+      if @card.save
+        format.html { redirect_to dashboard_url(@list.dashboard), notice: 'Card successfully created' }
+        format.json { render :show, status: :created, location: @card }
+      else
+        format.html { render :new, dashboard_id: @list.dashboard.id }
+        format.json { render json: @card.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  private
+
+  def card_params
+    params.require(:card).permit(:title, :text, :due_date)
+  end
+
+  def set_list
+    @list = List.find(params[:list_id])
+  end
+end

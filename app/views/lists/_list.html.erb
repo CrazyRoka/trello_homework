@@ -1,4 +1,13 @@
-<tr>
-  <td><%= list.title %></td>
-  <td><%= list.id %></td>
-</tr>
+<div class="column">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><%= list.title %></h5>
+    </div>
+  </div>
+  <%= render list.cards %>
+  <div class="card">
+    <div class="card-header">
+      <%= link_to '+Add another card', new_list_card_path(list.id) %>
+    </div>
+  </div>
+</div>
