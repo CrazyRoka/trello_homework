@@ -11,7 +11,6 @@ class User < ApplicationRecord
                                 foreign_key: 'owner_id',
                                 dependent:   :nullify
 
-  validates :name, presence: true, allow_blank: false
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   before_validation { name&.squish! }

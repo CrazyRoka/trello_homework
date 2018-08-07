@@ -31,4 +31,31 @@ describe Dashboard do
       expect(dashboard_list[1]).to eq(school_dashboard)
     end
   end
+
+  context 'Copy' do
+    let(:dashboard) { create(:dashboard) }
+    let(:list) { create(:list, dashboard: dashboard) }
+    let(:card) { create(:card, list: list) }
+    let!(:comment) { create(:comment, card: card) }
+    let!(:label) { create(:label, dashboard: dashboard) }
+
+    it 'copies dashboard with dependencies' do
+      label.cards << card
+      label.save
+      dashboard_copy = CopyDashboard.new.call(dashboard).value!
+      expect(dashboard_copy).not_to eq(dashboard)
+      expect(dashboard_copy.owner).to eq(dashboard.owner)
+
+      expect(dashboard_copy.lists[0]).not_to eq(dashboard.lists[0])
+      expect(dashboard_copy.lists[0].title).to eq(dashboard.lists[0].title)
+
+      expect(dashboard_copy.lists[0].cards[0]).not_to eq(dashboard.lists[0].cards[0])
+      expect(dashboard_copy.lists[0].cards[0].text).to eq(dashboard.lists[0].cards[0].text)
+
+      expect(dashboard_copy.lists[0].cards[0].comments[0]).not_to eq(dashboard.lists[0].cards[0].comments[0])
+      expect(dashboard_copy.lists[0].cards[0].comments[0].text).to eq(dashboard.lists[0].cards[0].comments[0].text)
+
+      expect(dashboard_copy.labels[0].cards[0]).to eq(dashboard_copy.lists[0].cards[0])
+    end
+  end
 end
