@@ -8,5 +8,6 @@ class Dashboard < ApplicationRecord
   has_many :lists, dependent: :destroy
   has_many :labels, dependent: :destroy
 
-  scope :ordered_by_title, -> { order(arel_table[:title]) }
+  scope :ordered_by_title, -> { order(title: :asc) }
+  scope :ordered_by_updates, -> { order(updated_at: :desc) }
 end

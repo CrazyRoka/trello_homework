@@ -30,6 +30,15 @@ describe Dashboard do
       expect(dashboard_list[0]).to eq(link_up_dashboard)
       expect(dashboard_list[1]).to eq(school_dashboard)
     end
+
+    let(:other_list) { Dashboard.ordered_by_updates }
+
+    it 'orders dashboards by update' do
+      link_up_dashboard.title = '123'
+      link_up_dashboard.save
+      expect(other_list[0]).to eq(link_up_dashboard)
+      expect(other_list[1]).to eq(school_dashboard)
+    end
   end
 
   context 'Copy' do
