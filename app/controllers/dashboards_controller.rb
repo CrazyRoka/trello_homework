@@ -54,10 +54,10 @@ class DashboardsController < ApplicationController
   end
 
   def copy
-    @dashboard = @dashboard.dup
+    @dashboard = CopyDashboard.new.call(@dashboard)
     respond_to do |format|
-      if @dashboard.save
-        format.html { redirect_to @dashboard, notice: 'Dashboard was successfully duplicated.' }
+      if @dashboard.value_or(false)
+        format.html { redirect_to @dashboard.value!, notice: 'Dashboard was successfully duplicated.' }
         format.json { render :show, status: :ok, location: @dashboard }
       else
         format.html { render :edit }
