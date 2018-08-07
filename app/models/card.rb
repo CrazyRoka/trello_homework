@@ -1,5 +1,7 @@
 class Card < ApplicationRecord
-  include Title
+  extend Title
+
+  squishes :title
 
   belongs_to :list, required: true, touch: true
   has_many :comments, dependent: :destroy

@@ -1,5 +1,7 @@
 class Dashboard < ApplicationRecord
-  include Title
+  extend Title
+
+  squishes :title
 
   has_and_belongs_to_many :users
   belongs_to :owner, class_name: 'User', required: true

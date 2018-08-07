@@ -1,10 +1,13 @@
 require 'active_support/concern'
 
 module Title
-  extend ActiveSupport::Concern
-
-  included do
-    before_validation { title&.squish! }
-    validates :title, presence: true, allow_blank: false
+  def squishes(*fields)
+    fields.each do |field|
+      class_eval(<<-END
+        before_validation { #{field}&.squish! }
+        validates :#{field}, presence: true
+        END
+      )
+    end
   end
 end
