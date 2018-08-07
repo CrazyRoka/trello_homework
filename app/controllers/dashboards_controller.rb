@@ -15,6 +15,7 @@ class DashboardsController < ApplicationController
 
   def create
     @dashboard = Dashboard.new(dashboard_params)
+    p dashboard_params
     @dashboard.owner = current_user
     @dashboard.users << current_user
 

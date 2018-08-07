@@ -1,6 +1,7 @@
 class ListsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_dashboard, only: [:new, :create, :destroy]
+  before_action :set_list, only: [:destroy]
 
   def index
     @lists = List.all
@@ -40,5 +41,9 @@ class ListsController < ApplicationController
 
   def set_dashboard
     @dashboard = Dashboard.find(params[:dashboard_id])
+  end
+
+  def set_list
+    @list = List.find(params[:id])
   end
 end

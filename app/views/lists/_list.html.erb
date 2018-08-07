@@ -1,16 +1,22 @@
-<div class="column">
-  <div class="card">
-    <div class="card-header">
-      <div style="float: left;"><%= list.title %></div>
-      <div style="float: right;">
-        <%= link_to 'Delete', dashboard_list_path(list.dashboard),
-                              method: :delete, class:  "btn btn-danger",
-                              data: { confirm: 'Are you sure?' } %>
-        </div>
+<div class="column", id="<%= list.id %>">
+  <div class="column-header">
+    <div class="card">
+      <div class="card-header">
+        <div style="float: left;"><%= list.title %></div>
+        <div style="float: right;">
+          <%= link_to 'Delete', dashboard_list_path(list.dashboard, list),
+                                method: :delete, class:  "btn btn-danger",
+                                data: { confirm: 'Are you sure?' } %>
+          </div>
+      </div>
     </div>
   </div>
-  <%= render list.cards %>
-  <div class="card">
-    <%= link_to '+Add a card', new_list_card_path(list.id), class:"btn btn-primary" %>
+  <div class="column-content">
+    <%= render list.cards %>
+  </div>
+  <div class="column-footer">
+    <div class="card">
+      <%= link_to '+Add a card', new_list_card_path(list.id), class:"btn btn-primary" %>
+    </div>
   </div>
 </div>

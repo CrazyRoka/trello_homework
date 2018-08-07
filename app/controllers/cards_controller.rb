@@ -1,6 +1,7 @@
 class CardsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_list, only: [:new, :create]
+  before_action :set_card, only: [:update]
 
   def new
     @card = Card.new
@@ -20,13 +21,29 @@ class CardsController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      if @card.update(card_params)
+        format.html { redirect_to @card.list.dashboard, notice: 'Card was successfully updated.' }
+        format.json { render :show, status: :ok, location: @card }
+      else
+        format.html { render :edit }
+        format.json { render json: @card.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def card_params
-    params.require(:card).permit(:title, :text, :due_date)
+    params.require(:card).permit(:title, :text, :due_date, :list_id)
   end
 
   def set_list
     @list = List.find(params[:list_id])
+  end
+
+  def set_card
+    @card = Card.find(params[:id])
   end
 end

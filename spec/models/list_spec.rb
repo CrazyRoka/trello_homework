@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe List do
   context 'Association' do
-    it { is_expected.to belong_to(:dashboard).touch(true) }
+    it { is_expected.to belong_to(:dashboard).required.touch(true) }
     it { is_expected.to have_many(:cards).dependent(:destroy) }
   end
 

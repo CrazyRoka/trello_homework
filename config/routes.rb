@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :lists, only: [:index] do
     resources :cards, only: [:new, :create]
   end
+  resources :cards, only: [:update]
   root to: "home#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
