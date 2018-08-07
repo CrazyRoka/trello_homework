@@ -1,6 +1,6 @@
 class ListsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_dashboard, only: [:new, :create]
+  before_action :set_dashboard, only: [:new, :create, :destroy]
 
   def index
     @lists = List.all
@@ -21,6 +21,14 @@ class ListsController < ApplicationController
         format.html { render :new, dashboard_id: @dashboard.id }
         format.json { render json: @list.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    @list.destroy
+    respond_to do |format|
+      format.html { redirect_to dashboard_url(@dashboard), notice: 'List was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
 

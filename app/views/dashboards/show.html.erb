@@ -21,9 +21,7 @@
   <%= render @dashboard.lists %>
   <div class="column">
     <div class="card">
-      <div class="card-header">
-        <%= link_to '+Add another list', new_dashboard_list_path(@dashboard.id) %>
-      </div>
+      <%= link_to '+Add another list', new_dashboard_list_path(@dashboard.id), class:"btn btn-success" %>
     </div>
   </div>
 </div>

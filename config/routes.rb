@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   post 'dashboards/copy/:id', to: 'dashboards#copy', as: :copy_dashboard
   devise_for :users
   resources :dashboards do
-    resources :lists, only: [:new, :create]
+    resources :lists, only: [:new, :create, :destroy]
   end
   resources :lists, only: [:index] do
     resources :cards, only: [:new, :create]
