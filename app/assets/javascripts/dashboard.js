@@ -32,7 +32,33 @@ function init() {
       }
     }
   } );
-  $( ".column-content" ).disableSelection();
+  $( ".column-content, .board" ).disableSelection();
 
-
+  $( ".board" ).sortable( {
+    revert: true,
+    items: '> div:not(.pin)',
+    update: function(event, ui) {
+      var list_id = ui.item.attr('id');
+      var container = ui.item.parent().children();
+      var i = 0, pos;
+      while(container[i].id != list_id)i+=1;
+      if(container.length == 2)pos = (1 << 16);
+      else if(i == 0)pos = container[i+1].getAttribute('pos') / 2;
+      else if(i + 2 == container.length)pos = (1 << 16) + parseInt(container[i-1].getAttribute('pos'));
+      else pos = (parseInt(container[i-1].getAttribute('pos'))
+                  + parseInt(container[i+1].getAttribute('pos'))) / 2;
+      container[i].setAttribute('pos', pos);
+      $.ajax({
+        url: '/lists/' + list_id,
+        data: {
+         'list': {
+                   'position': pos,
+                 },
+        },
+        type: 'patch',
+        success: function (response) {
+        }
+      } );
+    }
+  } );
 }

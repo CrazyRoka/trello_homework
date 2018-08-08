@@ -1,7 +1,7 @@
 class ListsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_dashboard, only: [:new, :create, :destroy]
-  before_action :set_list, only: [:destroy]
+  before_action :set_list, only: [:destroy, :update]
 
   def index
     @lists = List.all
@@ -33,10 +33,22 @@ class ListsController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      if @list.update(list_params)
+        # format.html { redirect_to @card.list.dashboard, notice: 'Card was successfully updated.' }
+        format.json { render :show, status: :ok, location: @list }
+      else
+        # format.html { render :edit }
+        format.json { render json: @list.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def list_params
-    params.require(:list).permit(:title)
+    params.require(:list).permit(:title, :position)
   end
 
   def set_dashboard

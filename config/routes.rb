@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :dashboards do
     resources :lists, only: [:new, :create, :destroy]
   end
-  resources :lists, only: [:index] do
+  resources :lists, only: [:index, :update] do
     resources :cards, only: [:new, :create]
   end
   resources :cards, only: [:update]

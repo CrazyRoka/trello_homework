@@ -19,7 +19,7 @@
 
 <div class="board">
   <%= render @dashboard.lists %>
-  <div class="column">
+  <div class="column pin">
     <div class="card">
       <%= link_to '+Add another list', new_dashboard_list_path(@dashboard.id), class:"btn btn-success" %>
     </div>
