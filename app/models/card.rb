@@ -10,6 +10,7 @@ class Card < ApplicationRecord
   has_and_belongs_to_many :users
 
   before_validation { text&.strip! }
+  before_create { self.position = list&.cards&.last&.position&.*(2) || (1 << 16) }
 
   scope :by_labels,
         ->(label_ids) { joins(:labels).where(labels: { id: label_ids }) }
@@ -22,4 +23,6 @@ class Card < ApplicationRecord
   scope :without_due_date, -> { where(due_date: nil) }
   scope :overdue, -> { should_be_done_until(Time.now) }
   scope :by_title, ->(str) { where(arel_table[:title].matches("%#{str}%")) }
+
+  validates_numericality_of :position, greater_than_or_equal_to: 0
 end

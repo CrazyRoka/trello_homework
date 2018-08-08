@@ -13,6 +13,7 @@ describe Card do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.not_to validate_presence_of(:text) }
     it { is_expected.not_to validate_presence_of(:due_date) }
+    it { is_expected.to validate_numericality_of(:position).is_greater_than_or_equal_to(0) }
   end
 
   context 'Callbacks' do
@@ -20,6 +21,12 @@ describe Card do
 
     it 'squishes title' do
       expect(card.title).to eq('My name')
+    end
+
+    it 'increases position' do
+      expect(card.position).to eq(1<<16)
+      expect(create(:card, list: card.list).position).to eq(1<<17)
+      expect(create(:card).position).to eq(1<<16)
     end
   end
 

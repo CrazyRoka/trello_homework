@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Dashboard do
   context 'Association' do
     it { is_expected.to have_and_belong_to_many(:users) }
-    it { is_expected.to have_many(:lists).dependent(:destroy) }
+    it { is_expected.to have_many(:lists).dependent(:destroy).order(:position) }
     it { is_expected.to have_many(:labels).dependent(:destroy) }
     it { is_expected.to belong_to(:owner) }
   end
