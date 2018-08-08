@@ -24,10 +24,10 @@ class CardsController < ApplicationController
   def update
     respond_to do |format|
       if @card.update(card_params)
-        format.html { redirect_to @card.list.dashboard, notice: 'Card was successfully updated.' }
+        # format.html { redirect_to @card.list.dashboard, notice: 'Card was successfully updated.' }
         format.json { render :show, status: :ok, location: @card }
       else
-        format.html { render :edit }
+        # format.html { render :edit }
         format.json { render json: @card.errors, status: :unprocessable_entity }
       end
     end
